@@ -15,7 +15,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 
 // 🛠️ Tools Pages Imports
-import UniversalConverter from "./pages/ImageTools/UniversalConverter"; // <-- Yeh import add kiya hai
+// 👇 1. Yahan humne aapka page import kiya (Note: Agar file name mein space hai to exactly waisa hi likhna parega)
+import UniversalConverter from "./pages/ImageTools/Universal Image Converter";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +42,9 @@ const App = () => {
                 <Route path="/terms" element={<Terms />} />
                 
                 {/* 🚀 Active Tools & Dynamic SEO Routes */}
-                <Route path="/convert-image" element={<UniversalConverter />} /> {/* <-- Yeh route register kar diya */}
-                
+                {/* 👇 2. Yahan humne tool ka url route set kar diya */}
+                <Route path="/convert-image" element={<UniversalConverter />} />
+               
               </Routes>
             </main>
             

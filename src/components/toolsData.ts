@@ -12,13 +12,13 @@ export const toolsList = [
   { name: "Favicon Generator", to: "/favicon-generator", icon: Smile, category: "convert" },
   
   // Optimize Tools
-  { name: "Compress Image (Auto / Target Size)", to: "/compress-image", icon: FileDigit, category: "optimize" },
+  { name: "Compress Image ", to: "/compress-image", icon: FileDigit, category: "optimize" },
   { name: "Resize Image", to: "/resize-image", icon: Maximize2, category: "optimize" },
   { name: "Image Splitter", to: "/image-splitter", icon: Layers, category: "optimize" },
-  { name: "Social Media Resizer", to: "/social-resizer", icon: Share2, category: "optimize" },
+  
   
   // Edit Tools
-  { name: "Crop Image (Square / Circle)", to: "/crop-image", icon: Crop, category: "edit" },
+  { name: "Crop Image ", to: "/crop-image", icon: Crop, category: "edit" },
   { name: "Rotate Image", to: "/rotate-image", icon: RotateCw, category: "edit" },
   { name: "Flip Image", to: "/flip-image", icon: FlipHorizontal, category: "edit" },
   { name: "Brightness Adjust", to: "/brightness-adjust", icon: Sun, category: "edit" },
