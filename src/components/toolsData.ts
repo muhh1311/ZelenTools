@@ -8,7 +8,7 @@ import {
 
 export const toolsList = [
   // Convert Tools
-      { name: "Universal Image Converter", to: "/convert-image", icon: Image, category: "convert" },
+  { name: "Image Converter", to: "/convert-image", icon: Image, category: "convert" },
   { name: "Favicon Generator", to: "/favicon-generator", icon: Smile, category: "convert" },
   
   // Optimize Tools
