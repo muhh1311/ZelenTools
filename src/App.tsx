@@ -12,28 +12,7 @@ import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 
-import ImageConverter from "./pages/ImageTools/ImageConverter";
-import FaviconGenerator from "./pages/ImageTools/FaviconGenerator";
-import CompressImage from "./pages/ImageTools/CompressImage";
-import ResizeImage from "./pages/ImageTools/ResizeImage";
-import ImageSplitter from "./pages/ImageTools/ImageSplitter";
-import CropImage from "./pages/ImageTools/CropImage";
-import RotateImage from "./pages/ImageTools/RotateImage";
-import FlipImage from "./pages/ImageTools/FlipImage";
-import BrightnessAdjust from "./pages/ImageTools/BrightnessAdjust";
-import ContrastAdjust from "./pages/ImageTools/ContrastAdjust";
-import SaturationAdjust from "./pages/ImageTools/SaturationAdjust";
-import BlurImage from "./pages/ImageTools/BlurImage";
-import GrayscaleImage from "./pages/ImageTools/GrayscaleImage";
-import SepiaFilter from "./pages/ImageTools/SepiaFilter";
-import BackgroundRemover from "./pages/ImageTools/BackgroundRemover";
-import ImageWatermark from "./pages/ImageTools/ImageWatermark";
-import TextToImage from "./pages/ImageTools/TextToImage";
-import MemeGenerator from "./pages/ImageTools/MemeGenerator";
-import PassportPhoto from "./pages/ImageTools/PassportPhoto";
-import ImageOCR from "./pages/ImageTools/ImageOCR";
-import ColorPicker from "./pages/ImageTools/ColorPicker";
-import RemoveExif from "./pages/ImageTools/RemoveExif";
+import { toolRoutes } from "@/config/toolRoutes";
 
 const queryClient = new QueryClient();
 
@@ -56,28 +35,9 @@ const App = () => {
                 <Route path="/terms" element={<Terms />} />
 
                 {/* Image Tools */}
-                <Route path="/convert-image" element={<ImageConverter />} />
-                <Route path="/favicon-generator" element={<FaviconGenerator />} />
-                <Route path="/compress-image" element={<CompressImage />} />
-                <Route path="/resize-image" element={<ResizeImage />} />
-                <Route path="/image-splitter" element={<ImageSplitter />} />
-                <Route path="/crop-image" element={<CropImage />} />
-                <Route path="/rotate-image" element={<RotateImage />} />
-                <Route path="/flip-image" element={<FlipImage />} />
-                <Route path="/brightness-adjust" element={<BrightnessAdjust />} />
-                <Route path="/contrast-adjust" element={<ContrastAdjust />} />
-                <Route path="/saturation-adjust" element={<SaturationAdjust />} />
-                <Route path="/blur-image" element={<BlurImage />} />
-                <Route path="/grayscale-image" element={<GrayscaleImage />} />
-                <Route path="/sepia-filter" element={<SepiaFilter />} />
-                <Route path="/background-remover" element={<BackgroundRemover />} />
-                <Route path="/image-watermark" element={<ImageWatermark />} />
-                <Route path="/text-to-image" element={<TextToImage />} />
-                <Route path="/meme-generator" element={<MemeGenerator />} />
-                <Route path="/passport-photo" element={<PassportPhoto />} />
-                <Route path="/image-to-text" element={<ImageOCR />} />
-                <Route path="/color-picker" element={<ColorPicker />} />
-                <Route path="/remove-exif" element={<RemoveExif />} />
+                {toolRoutes.map((route) => (
+                  <Route key={route.path} path={route.path} element={route.element} />
+                ))}
 
                 <Route path="/tool/universal-image-converter" element={<Navigate to="/convert-image" replace />} />
               </Routes>

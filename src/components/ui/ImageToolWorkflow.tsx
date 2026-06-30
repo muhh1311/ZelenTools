@@ -10,6 +10,7 @@ import {
   formatFileSize,
   downloadResults,
 } from "@/logic/ImageTools/imageUtils";
+import { OutputFormat } from "@/logic/ImageTools/ImageConverter";
 
 interface ImageToolWorkflowProps {
   multiple?: boolean;
@@ -21,8 +22,10 @@ interface ImageToolWorkflowProps {
   sidebarOptions: ReactNode;
   onProcess: (
     files: File[],
-    onProgress?: (fileIndex: number, percent: number, file: File) => void
+    onProgress?: (fileIndex: number, percent: number, file: File) => void,
+    format?: OutputFormat
   ) => Promise<ProcessedImage[]>;
+  selectedFormat?: OutputFormat;
   zipDownloadName?: string;
   showAddFiles?: boolean;
   uploadTitle?: string;
@@ -40,6 +43,7 @@ export default function ImageToolWorkflow({
   downloadLabel,
   sidebarOptions,
   onProcess,
+  selectedFormat,
   zipDownloadName,
   showAddFiles = true,
   uploadTitle = "Select Images",
@@ -47,6 +51,9 @@ export default function ImageToolWorkflow({
   hideResultThumbnails = false,
   renderResultExtra,
 }: ImageToolWorkflowProps) {
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>("png");
+  // If parent provides a `selectedFormat` prop, prefer that for processing
+  const formatToUse = selectedFormat ?? outputFormat;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [resultPreviewUrls, setResultPreviewUrls] = useState<string[]>([]);
@@ -122,9 +129,15 @@ export default function ImageToolWorkflow({
     setIsProcessing(true);
 
     try {
-      const results = await onProcess(rawFiles, (fileIdx, percent, file) => {
-        updateProgress(fileIdx, percent, file.name, formatFileSize(file.size));
-      });
+      const results = await onProcess(
+        rawFiles,
+        (fileIdx, percent, file) => {
+          updateProgress(fileIdx, percent, file.name, formatFileSize(file.size));
+        },
+        formatToUse
+      );
+      // Note: if parent passed a `selectedFormat` prop, use it instead
+      // (some pages manage the format in the sidebar).
       setConvertedResults(results);
       setStage("RESULT");
       toast.success(`${results.length} image${results.length > 1 ? "s" : ""} processed`);
