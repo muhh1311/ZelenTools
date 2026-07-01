@@ -1,8 +1,6 @@
 // src/hooks/useToolWorkflow.ts
 import { useState } from 'react';
-
-// 4 stages jo har tool mein use hongi
-export type ToolStage = 'UPLOAD' | 'WORKSPACE' | 'PROCESSING' | 'RESULT';
+import type { ToolStage } from '@/types';
 
 export function useToolWorkflow() {
   // 1. Current screen tracker state
