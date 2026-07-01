@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import WorkspaceLayout from "@/components/ui/WorkspaceLayout";
 import ImageToolWorkflow from "@/components/ui/ImageToolWorkflow";
 import { downloadConvertedImage, downloadConvertedImagesAsZip } from "@/logic/ImageTools/ImageConverter";
 import { convertWebpToJpg } from "@/logic/ImageTools/webpToJpg";
+import { ProcessedImage } from "@/logic/ImageTools/imageUtils";
 
 export default function WebpToJpg() {
   const [converting, setConverting] = useState(false);
@@ -11,7 +11,7 @@ export default function WebpToJpg() {
   const handleProcessImages = async (
     files: File[],
     onProgress?: (fileIndex: number, percent: number, file: File) => void
-  ) => {
+  ): Promise<ProcessedImage[]> => {
     setConverting(true);
     try {
       const results = await Promise.all(
@@ -38,20 +38,21 @@ export default function WebpToJpg() {
   };
 
   return (
-    <WorkspaceLayout title="WEBP to JPG Converter">
-      <ImageToolWorkflow
-        title="WEBP to JPG Converter"
-        description="Convert WEBP images to JPG format"
-        onProcessImages={handleProcessImages}
-        allowMultiple={true}
-        fileTypes={[".webp"]}
-        resultDescription={(count) => `${count} image${count !== 1 ? "s" : ""} converted to JPG`}
-        downloadLabel={(count) => count === 1 ? "Download converted image" : "Download all as ZIP"}
-      />
-    </WorkspaceLayout>
-  );
-}
-      />
-    </WorkspaceLayout>
+    <ImageToolWorkflow
+      uploadTitle="WEBP to JPG Converter"
+      actionButtonText={converting ? "Converting..." : "Convert Images"}
+      statusText="Converting WEBP to JPG..."
+      resultTitle="Conversion Complete!"
+      getResultDescription={(count) => `${count} image${count !== 1 ? "s" : ""} converted to JPG`}
+      downloadLabel={(count) => count === 1 ? "Download converted image" : "Download all as ZIP"}
+      sidebarOptions={
+        <div className="text-sm text-slate-500">
+          <h3 className="font-semibold text-slate-800 dark:text-white mb-2">Converter Settings</h3>
+          <p>Files will be automatically processed and prepared for download as JPG format.</p>
+        </div>
+      }
+      onProcess={handleProcessImages}
+      multiple={true}
+    />
   );
 }

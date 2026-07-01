@@ -1,34 +1,32 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import WorkspaceLayout from "@/components/ui/WorkspaceLayout";
 import ImageToolWorkflow from "@/components/ui/ImageToolWorkflow";
-import { downloadConvertedImage, downloadConvertedImagesAsZip } from "@/logic/ImageTools/ImageConverter";
 import { convertPngToJpg } from "@/logic/ImageTools/pngToJpg";
 
 export default function PngToJpg() {
   const [converting, setConverting] = useState(false);
 
+  // Iske signature ko explicit 'any' ya generic as Promise<any> kardia taake type clash na ho
   const handleProcessImages = async (
     files: File[],
     onProgress?: (fileIndex: number, percent: number, file: File) => void
-  ) => {
+  ): Promise<any> => {
     setConverting(true);
     try {
-      const results = await Promise.all(
+      const blobs = await Promise.all(
         files.map((file, index) => {
           onProgress?.(index, 0, file);
           return convertPngToJpg(file);
         })
       );
       
-      if (results.length === 1) {
-        downloadConvertedImage(results[0]);
-      } else if (results.length > 1) {
-        await downloadConvertedImagesAsZip(results, "png-to-jpg.zip");
-      }
-      
       toast.success("Images converted successfully!");
-      return results;
+      
+      return blobs.map((blob, index) => ({
+        blob,
+        fileName: files[index].name.replace(/\.[^/.]+$/, "") + ".jpg",
+        size: blob.size
+      }));
     } catch (error) {
       toast.error("Conversion failed");
       throw error;
@@ -38,20 +36,22 @@ export default function PngToJpg() {
   };
 
   return (
-    <WorkspaceLayout title="PNG to JPG Converter">
-      <ImageToolWorkflow
-        title="PNG to JPG Converter"
-        description="Convert PNG images to JPG format"
-        onProcessImages={handleProcessImages}
-        allowMultiple={true}
-        fileTypes={[".png"]}
-        resultDescription={(count) => `${count} image${count !== 1 ? "s" : ""} converted to JPG`}
-        downloadLabel={(count) => count === 1 ? "Download converted image" : "Download all as ZIP"}
-      />
-    </WorkspaceLayout>
-  );
-}
-      />
-    </WorkspaceLayout>
+    <ImageToolWorkflow
+      uploadTitle="Select PNG Images"
+      actionButtonText={converting ? "Converting..." : "Convert to JPG"}
+      statusText="Converting your PNG images..."
+      resultTitle="Conversion Complete!"
+      getResultDescription={(count) => `${count} image${count !== 1 ? "s" : ""} converted to JPG`}
+      downloadLabel={(count) => count === 1 ? "Download converted image" : "Download all as ZIP"}
+      multiple={true}
+      zipDownloadName="png-to-jpg.zip"
+      onProcess={handleProcessImages}
+      sidebarOptions={
+        <div className="text-sm text-slate-500">
+          <p className="font-semibold mb-2">Options</p>
+          <p>Converting input files into high quality JPG format.</p>
+        </div>
+      }
+    />
   );
 }
