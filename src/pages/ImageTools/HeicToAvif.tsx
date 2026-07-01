@@ -2,6 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import WorkspaceLayout from "@/components/ui/WorkspaceLayout";
 import ImageToolWorkflow from "@/components/ui/ImageToolWorkflow";
+import { downloadConvertedImage, downloadConvertedImagesAsZip } from "@/logic/ImageTools/ImageConverter";
+import { convertHeicToAvif } from "@/logic/ImageTools/heicToAvif";
 
 export default function HeicToAvif() {
   const [converting, setConverting] = useState(false);
@@ -12,9 +14,21 @@ export default function HeicToAvif() {
   ) => {
     setConverting(true);
     try {
-      // Conversion logic will be added here
+      const results = await Promise.all(
+        files.map((file, index) => {
+          onProgress?.(index, 0, file);
+          return convertHeicToAvif(file);
+        })
+      );
+      
+      if (results.length === 1) {
+        downloadConvertedImage(results[0]);
+      } else if (results.length > 1) {
+        await downloadConvertedImagesAsZip(results, "heic-to-avif.zip");
+      }
+      
       toast.success("Images converted successfully!");
-      return files;
+      return results;
     } catch (error) {
       toast.error("Conversion failed");
       throw error;
@@ -27,7 +41,7 @@ export default function HeicToAvif() {
     <WorkspaceLayout title="HEIC to AVIF Converter">
       <ImageToolWorkflow
         title="HEIC to AVIF Converter"
-        description="Convert HEIC images to AVIF format"
+        description="Convert HEIC/HEIF images from iPhone to AVIF format for best compression"
         onProcessImages={handleProcessImages}
         allowMultiple={true}
         fileTypes={[".heic", ".heif"]}

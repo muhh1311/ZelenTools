@@ -2,6 +2,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import WorkspaceLayout from "@/components/ui/WorkspaceLayout";
 import ImageToolWorkflow from "@/components/ui/ImageToolWorkflow";
+import { downloadConvertedImage, downloadConvertedImagesAsZip } from "@/logic/ImageTools/ImageConverter";
+import { convertWebpToJpg } from "@/logic/ImageTools/webpToJpg";
 
 export default function WebpToJpg() {
   const [converting, setConverting] = useState(false);
@@ -12,9 +14,21 @@ export default function WebpToJpg() {
   ) => {
     setConverting(true);
     try {
-      // Conversion logic will be added here
+      const results = await Promise.all(
+        files.map((file, index) => {
+          onProgress?.(index, 0, file);
+          return convertWebpToJpg(file);
+        })
+      );
+      
+      if (results.length === 1) {
+        downloadConvertedImage(results[0]);
+      } else if (results.length > 1) {
+        await downloadConvertedImagesAsZip(results, "webp-to-jpg.zip");
+      }
+      
       toast.success("Images converted successfully!");
-      return files;
+      return results;
     } catch (error) {
       toast.error("Conversion failed");
       throw error;
@@ -33,6 +47,10 @@ export default function WebpToJpg() {
         fileTypes={[".webp"]}
         resultDescription={(count) => `${count} image${count !== 1 ? "s" : ""} converted to JPG`}
         downloadLabel={(count) => count === 1 ? "Download converted image" : "Download all as ZIP"}
+      />
+    </WorkspaceLayout>
+  );
+}
       />
     </WorkspaceLayout>
   );

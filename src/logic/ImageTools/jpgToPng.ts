@@ -1,7 +1,5 @@
-// JPG to PNG Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertJpgToPng(file: File): Promise<Blob> {
-  // Convert JPG to PNG
-  return new Blob();
+export async function convertJpgToPng(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "png", 0.92);
 }

@@ -1,7 +1,5 @@
-// WEBP to JPG Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertWebpToJpg(file: File): Promise<Blob> {
-  // Convert WEBP to JPG
-  return new Blob();
+export async function convertWebpToJpg(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "jpg", 0.92);
 }

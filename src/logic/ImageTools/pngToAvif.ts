@@ -1,7 +1,5 @@
-// PNG to AVIF Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertPngToAvif(file: File): Promise<Blob> {
-  // Convert PNG to AVIF
-  return new Blob();
+export async function convertPngToAvif(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "webp", 0.85);
 }

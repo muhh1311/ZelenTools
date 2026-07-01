@@ -1,7 +1,5 @@
-// HEIC to AVIF Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertHeicToAvif(file: File): Promise<Blob> {
-  // Convert HEIC to AVIF
-  return new Blob();
+export async function convertHeicToAvif(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "webp", 0.85);
 }

@@ -1,7 +1,5 @@
-// PNG to WEBP Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertPngToWebp(file: File): Promise<Blob> {
-  // Convert PNG to WEBP
-  return new Blob();
+export async function convertPngToWebp(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "webp", 0.92);
 }

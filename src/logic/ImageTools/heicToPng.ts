@@ -1,7 +1,5 @@
-// HEIC to PNG Converter Logic
-// This file contains the conversion logic
+import { convertImage, ConvertedImage } from "./ImageConverter";
 
-export async function convertHeicToPng(file: File): Promise<Blob> {
-  // Convert HEIC to PNG
-  return new Blob();
+export async function convertHeicToPng(file: File): Promise<ConvertedImage> {
+  return convertImage(file, "png", 0.92);
 }
